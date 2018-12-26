@@ -1,0 +1,4 @@
+﻿  LeetCode.cpp
+c:\users\oooxy\onedrive\programming\c++\demo\from chalone\leetcode\leetcode\leetcode.cpp(82): warning C4018: '<': signed/unsigned mismatch
+c:\users\oooxy\onedrive\programming\c++\demo\from chalone\leetcode\leetcode\leetcode.cpp(104): warning C4018: '<': signed/unsigned mismatch
+  LeetCode.vcxproj -> C:\Users\oooxy\OneDrive\Programming\C++\Demo\From Chalone\LeetCode\Debug\LeetCode.exe
