@@ -7,13 +7,15 @@
 #include <deque>
 #include <string>
 #include <map>
+#include <unordered_map>
 #include <algorithm>
 #include <cmath>
 
-#include <Windows.h>
-#include <sql.h>
-
 using namespace std;
+
+template <typename T> void print(const T& v) {
+	for (auto& x : v) cout << x << endl;
+}
 
 struct ListNode {
 	int val;
@@ -24,19 +26,40 @@ struct ListNode {
 
 class Solution {
 public:
-	vector<int> twoSum(vector<int>& nums, int target);		// 001 Two Sum (Using Vector)
-	ListNode* addTwoNumbers(ListNode* l1, ListNode* l2);	// 002 Add Two Numbers (Using Link List)
-	int lengthOfLongestSubstring(string s);					// 003 Longest Substring Without Repeating Characters
+	vector<int> twoSum(vector<int>& nums, int target);							// 001 Two Sum (Using Vector)
+	ListNode* addTwoNumbers(ListNode* l1, ListNode* l2);						// 002 Add Two Numbers (Using Link List)
+	int lengthOfLongestSubstring(string s);										// 003 Longest Substring Without Repeating Characters
+	double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2);		// 004 Median of Two Sorted Arrays
 
-	string convert(string s, int numRows);					// 006 ZigZag Conversion
-	int reverse(int x);										// 007 Reverse Integer
-	int myAtoi(string str);									// 008 String to Integer
-	bool isPalindrome(int x);								// 009 Palindrome Number
-	bool isMatch(string s, string p);						// 010 Regular Expression Matching
-	int maxArea(vector<int>& height);						// 011 Container With Most Water
-	string intToRoman(int num);								// 012 Integer to Roman
-	int romanToInt(string s);								// 013 Roman to Integer
+	string convert(string s, int numRows);										// 006 ZigZag Conversion
+	int reverse(int x);															// 007 Reverse Integer
+	int myAtoi(string str);														// 008 String to Integer
+	bool isPalindrome(int x);													// 009 Palindrome Number
+	bool isMatch(string s, string p);											// 010 Regular Expression Matching
+	int maxArea(vector<int>& height);											// 011 Container With Most Water
+	string intToRoman(int num);													// 012 Integer to Roman
+	int romanToInt(string s);													// 013 Roman to Integer
+
+	vector<vector<int>> threeSum(vector<int>& nums);							// 015 3Sum
+
+	int numJewelsInStones(string J, string S);									// 771 Jewels and Stones
+	int rotatedDigits(int N);													// 788 Rotated Digits
+	string customSortString(string S, string T);								// 791 Custom Sort String
 };
+
+int main() {
+	// Solution s;
+	string s("abcsfweadsadfs");
+	cout << s.front() << endl;
+	unordered_map<char, int> T = { {'I',1},
+									{'V',5},
+									{'X',10},
+									{'L',50},
+									{'C',100},
+									{'D',500},
+									{'M',1000} };
+	
+}
 
 // 001 Two Sum (Using Vector)
 vector<int> Solution::twoSum(vector<int>& nums, int target) {
@@ -93,6 +116,39 @@ int Solution::lengthOfLongestSubstring(string s) {
 		m[s[i]] = i + 1;
 	}
 	return res;
+}
+
+// 004 Median of Two Sorted Arrays
+double Solution::findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2)
+{
+	size_t size = nums1.size() + nums2.size();
+	if (size == 0) return 0.0;
+	size_t mid = size / 2;
+	//防止越界
+	nums1.push_back(INT_MAX);
+	nums2.push_back(INT_MAX);
+	vector<int>::iterator n1 = nums1.begin(), n2 = nums2.begin();
+	int res = 0;
+	// 如下可以简化，但是为了看得清楚，不简化
+	if (size % 2) {
+		for (int i = 0; i <= mid; ++i) {
+			if (i == mid) { 
+				res = (*n1 < *n2) ? *n1 : *n2; 
+				return (double)res;
+			}
+			(*n1 < *n2) ? ++n1 : ++n2;
+		}
+	}
+	else {
+		for (int i = 0; i <= mid; ++i) {
+			if (i == mid - 1) res += (*n1 < *n2) ? *n1 : *n2;
+			if (i == mid) { 
+				res += (*n1 < *n2) ? *n1 : *n2; 
+				return (double)res / 2;
+			}
+			(*n1 < *n2) ? ++n1 : ++n2;
+		}
+	}	
 }
 
 // 006 ZigZag Conversion
@@ -266,8 +322,127 @@ string Solution::intToRoman(int num)
 	return res;
 }
 
-int main() {
-	string s = "123456";
-	cout << s.substr(3);
+// 013 Roman to Integer
+int Solution::romanToInt(string s)
+{
+	unordered_map<char, int> T = {	{'I',1},	
+									{'V',5}, 
+									{'X',10},
+									{'L',50},
+									{'C',100},
+									{'D',500},
+									{'M',1000} };
+	int sum = T[s.back()];
+	for (int i = s.length() - 2; i >= 0; i--) {
+		if (T[s[i]] < T[s[i + 1]]) sum -= T[s[i]];
+		else sum += T[s[i]];
+	}
+	return sum;
 }
+
+// 015 3Sum
+vector<vector<int>> Solution::threeSum(vector<int>& nums)
+{
+	vector<vector<int>> res;
+	sort(nums.begin(), nums.end());
+	for (int k = 0; k < nums.size(); ++k) {
+		if (nums[k] > 0) break;
+		// skip duplicated first number
+		if (k > 0 && nums[k] == nums[k - 1]) continue;
+		int target = 0 - nums[k];
+		int i = k + 1, j = nums.size() - 1;
+		while (i < j)
+		{
+			// Found Target
+			if (nums[i] + nums[j] == target) {
+				res.push_back({ nums[k],nums[i],nums[j] });
+				// Skip duplicated elements
+				while (i < j && nums[i] == nums[i + 1]) ++i;
+				while (i < j && nums[j] == nums[j - 1]) --j;
+				// thank u, next
+				++i; --j;
+			}
+			// number on the left is too small
+			else if (nums[i] + nums[j] < target) {
+				++i;				
+			}
+			// number on the right is too large
+			else {
+				--j;
+			}
+		}
+	}
+	return res;
+}
+
+// 771 Jewels and Stones
+int Solution::numJewelsInStones(string J, string S)
+{
+	int Sint[256] = { 0 };
+	for (int i = 0; i < S.size(); ++i) {
+		Sint[S[i]] += 1;
+	}
+	int res = 0;
+	for (int i = 0; i < J.size(); ++i) {
+		res += Sint[J[i]];
+	}
+	return res;
+}
+
+// 788 Rotated Digits
+int Solution::rotatedDigits(int N)
+{
+	int n[5], times = 0;
+	int flag = 0;
+	for (int i = 0; i <= N; ++i) {
+		flag = 0;
+		int temp = i, sep[5];
+		for (int j = 0; j < 5; ++j) {
+			int judge = temp % 10;
+			if (judge == 3 || judge == 4 || judge == 7) {
+				flag = 1;
+				break;
+			}
+			switch (judge)
+			{
+			case 0: sep[5 - j - 1] = 0; break;
+			case 1: sep[5 - j - 1] = 1; break;
+			case 2: sep[5 - j - 1] = 5; break;
+			case 5: sep[5 - j - 1] = 2; break;
+			case 6: sep[5 - j - 1] = 9; break;
+			case 8: sep[5 - j - 1] = 8; break;
+			case 9: sep[5 - j - 1] = 6; break;
+			}
+			temp /= 10;
+		}
+		if (flag == 1) continue;
+		int comp = 10000 * sep[0] + 1000 * sep[1] + 100 * sep[2] + 10 * sep[3] + sep[4];
+		if (comp != i) times++;
+	}
+	return times;
+}
+
+string Solution::customSortString(string S, string T)
+{
+	int t[26] = { 0 }, s[26] = { 0 };
+	for (auto&x : S) s[x - 'a']++;
+	for (auto& x : T) {
+		if (s[x - 'a']) t[x - 'a']++;
+	}
+	string res;
+	for (auto& x : S) {
+		if (!t[x - 'a']) continue;
+		int times = t[x - 'a'];
+		while (times) {
+			res += x;
+			times--;
+		}
+	}
+	for (auto&x : T) {
+		if (t[x - 'a'] == 0) res += x;
+	}
+	return res;
+}
+
+
 

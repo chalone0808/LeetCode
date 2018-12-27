@@ -1,4 +1,12 @@
 ﻿  LeetCode.cpp
-c:\users\oooxy\onedrive\programming\c++\demo\from chalone\leetcode\leetcode\leetcode.cpp(82): warning C4018: '<': signed/unsigned mismatch
-c:\users\oooxy\onedrive\programming\c++\demo\from chalone\leetcode\leetcode\leetcode.cpp(104): warning C4018: '<': signed/unsigned mismatch
+c:\users\oooxy\onedrive\programming\c++\demo\from chalone\leetcode\leetcode\leetcode.cpp(109): warning C4018: '<': signed/unsigned mismatch
+c:\users\oooxy\onedrive\programming\c++\demo\from chalone\leetcode\leetcode\leetcode.cpp(134): warning C4018: '<=': signed/unsigned mismatch
+c:\users\oooxy\onedrive\programming\c++\demo\from chalone\leetcode\leetcode\leetcode.cpp(143): warning C4018: '<=': signed/unsigned mismatch
+c:\users\oooxy\onedrive\programming\c++\demo\from chalone\leetcode\leetcode\leetcode.cpp(164): warning C4018: '<': signed/unsigned mismatch
+c:\users\oooxy\onedrive\programming\c++\demo\from chalone\leetcode\leetcode\leetcode.cpp(315): warning C4018: '<': signed/unsigned mismatch
+c:\users\oooxy\onedrive\programming\c++\demo\from chalone\leetcode\leetcode\leetcode.cpp(344): warning C4018: '<': signed/unsigned mismatch
+c:\users\oooxy\onedrive\programming\c++\demo\from chalone\leetcode\leetcode\leetcode.cpp(378): warning C4018: '<': signed/unsigned mismatch
+c:\users\oooxy\onedrive\programming\c++\demo\from chalone\leetcode\leetcode\leetcode.cpp(382): warning C4018: '<': signed/unsigned mismatch
+c:\users\oooxy\onedrive\programming\c++\demo\from chalone\leetcode\leetcode\leetcode.cpp(391): warning C4101: 'n': unreferenced local variable
+c:\users\oooxy\onedrive\programming\c++\demo\from chalone\leetcode\leetcode\leetcode.cpp(152): warning C4715: 'Solution::findMedianSortedArrays': not all control paths return a value
   LeetCode.vcxproj -> C:\Users\oooxy\OneDrive\Programming\C++\Demo\From Chalone\LeetCode\Debug\LeetCode.exe
