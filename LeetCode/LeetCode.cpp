@@ -1,6 +1,3 @@
-// LeetCode.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include "pch.h"
 #include <iostream>
 #include <vector>
@@ -26,21 +23,26 @@ struct ListNode {
 
 class Solution {
 public:
+	/*----------------------------------------------------------                 000                 ----------------------------------------------------------*/
 	vector<int> twoSum(vector<int>& nums, int target);							// 001 Two Sum (Using Vector)
 	ListNode* addTwoNumbers(ListNode* l1, ListNode* l2);						// 002 Add Two Numbers (Using Link List)
 	int lengthOfLongestSubstring(string s);										// 003 Longest Substring Without Repeating Characters
 	double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2);		// 004 Median of Two Sorted Arrays
-
+	string longestPalindrome(string s);											// 005 Longest Palindromic Substring
 	string convert(string s, int numRows);										// 006 ZigZag Conversion
 	int reverse(int x);															// 007 Reverse Integer
 	int myAtoi(string str);														// 008 String to Integer
 	bool isPalindrome(int x);													// 009 Palindrome Number
+	/*----------------------------------------------------------                 010                 ----------------------------------------------------------*/
 	bool isMatch(string s, string p);											// 010 Regular Expression Matching
 	int maxArea(vector<int>& height);											// 011 Container With Most Water
 	string intToRoman(int num);													// 012 Integer to Roman
 	int romanToInt(string s);													// 013 Roman to Integer
-
+	string longestCommonPrefix(vector<string>& strs);							// 014 Longest Common Prefix
 	vector<vector<int>> threeSum(vector<int>& nums);							// 015 3Sum
+	int threeSumClosest(vector<int>& nums, int target);							// 016 3Sum closest
+
+	int divide(int dividend, int divisor);										// 029 Divide Two Integers
 
 	int numJewelsInStones(string J, string S);									// 771 Jewels and Stones
 	int rotatedDigits(int N);													// 788 Rotated Digits
@@ -48,19 +50,14 @@ public:
 };
 
 int main() {
-	// Solution s;
-	string s("abcsfweadsadfs");
-	cout << s.front() << endl;
-	unordered_map<char, int> T = { {'I',1},
-									{'V',5},
-									{'X',10},
-									{'L',50},
-									{'C',100},
-									{'D',500},
-									{'M',1000} };
+	Solution S;
+	string s("PAYPALISHIRING");
+	string::iterator i = s.end() - 1;
+	cout << *i;
 	
 }
 
+/*----------------------------------------------------------                 000                 ----------------------------------------------------------*/
 // 001 Two Sum (Using Vector)
 vector<int> Solution::twoSum(vector<int>& nums, int target) {
 	vector<int> res;
@@ -151,40 +148,52 @@ double Solution::findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2)
 	}	
 }
 
+// 005 Longest Palindromic Substring
+string Solution::longestPalindrome(string s)
+{
+	string::iterator a = s.begin(), b = s.end();
+
+	return string();
+}
+
 // 006 ZigZag Conversion
 string Solution::convert(string s, int numRows) {
-	// Initiate a 2D vector
+	if (numRows >= s.size() || numRows == 1) return s;
+	string res;
+
+	// initiate a 2-d vector with the first element in it
 	vector<vector<char>> t;
 	for (int i = 0; i < numRows; ++i) {
-		vector<char> v;
+		vector<char> v = { s[i] };
 		t.push_back(v);
 	}
-	int down = 1;
-	int p = 0;
-	for (int i = 0; i < s.size(); ++i) {
-		if (down == 1) {
-			t[p++].push_back(s[i]);
-			if (p == numRows) {
-				p--;
-				down = 0;
+
+	/** the sorting goes like:
+	 * 1,2,...,numRows,numRows-1,...1,2,...,numRows.......
+	 */
+	int going_up = 1;
+	int nowRow = numRows - 1;
+	for (int i = numRows; i < s.size(); ++i) {
+		if (going_up) {
+			t[--nowRow].push_back(s[i]);
+			if (nowRow == 0) { 
+				going_up = 0; 
 				continue;
 			}
 		}
-		if (down == 0) {
-			t[p--].push_back(s[i]);
-			if (p == -1) {
-				p++;
-				p++;
-				down = 1;
+		if (!going_up) {
+			t[++nowRow].push_back(s[i]);
+			if (nowRow == numRows - 1) {
+				going_up = 1;
 				continue;
 			}
 		}
 	}
-	string res;
-	for (int i = 0; i < numRows; ++i) {
-		for (auto &x : t[i]) {
-			res += x;
+	for (auto& x : t) {
+		for (auto& y : x) {
+			cout << y;
 		}
+		cout << endl;
 	}
 	return res;
 }
@@ -272,6 +281,7 @@ bool Solution::isPalindrome(int x)
 	return true;
 }
 
+/*----------------------------------------------------------                 010                 ----------------------------------------------------------*/
 // 010 Regular Expression Matching
 bool Solution::isMatch(string s, string p)
 {
@@ -340,6 +350,23 @@ int Solution::romanToInt(string s)
 	return sum;
 }
 
+// 014 Longest Common Prefix
+string Solution::longestCommonPrefix(vector<string>& strs)
+{
+	if (strs.size() == 0) return "";
+	string prefix = strs[0];
+	for (int i = 1; i < strs.size(); ++i) {
+		if (prefix.size() == 0) return "";
+		int len = prefix.size() < strs[i].size() ? prefix.size() : strs[i].size();
+		// 先做一个长度的截断
+		prefix = prefix.substr(0, len);
+		for (int k = 0; k < len; ++k) {
+			if (prefix[k] != strs[i][k]) prefix = prefix.substr(0, k);
+		}
+	}
+	return prefix;
+}
+
 // 015 3Sum
 vector<vector<int>> Solution::threeSum(vector<int>& nums)
 {
@@ -373,6 +400,37 @@ vector<vector<int>> Solution::threeSum(vector<int>& nums)
 		}
 	}
 	return res;
+}
+
+// 016 3Sum closest
+int Solution::threeSumClosest(vector<int>& nums, int target)
+{
+	int res = 0;
+	if (nums.size() == 3) {
+		for (auto&x : nums) res += x;
+		return res;
+	}
+
+	for (auto& x : nums) {
+		x -= target;
+	}
+	sort(nums.begin(), nums.end());
+	// compare with zero
+	for (int i = 0; i < nums.size() - 2; ++i) {
+
+	}
+	return 0;
+}
+
+/*----------------------------------------------------------                 020                 ----------------------------------------------------------*/
+// 029 Divide Two Integers
+int Solution::divide(int dividend, int divisor)
+{
+	int flag = 0;
+	if (dividend < 0 && divisor < 0) { dividend = -dividend; divisor = -divisor; }
+	if (dividend < 0 && divisor > 0) { flag = 1; dividend = -dividend; }
+	if (dividend > 0 && divisor < 0) { flag = 1; divisor = -divisor; }
+	return 0;
 }
 
 // 771 Jewels and Stones
@@ -422,6 +480,7 @@ int Solution::rotatedDigits(int N)
 	return times;
 }
 
+// 791 Custom Sort String
 string Solution::customSortString(string S, string T)
 {
 	int t[26] = { 0 }, s[26] = { 0 };
